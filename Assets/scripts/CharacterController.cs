@@ -15,6 +15,7 @@ public class CharacterController : MonoBehaviour
     public float mouseSens;
     public float minX = -90.0f;
     public float maxX = 90.0f;
+    public Animator anim;
 
 
     private void Awake()
@@ -30,6 +31,41 @@ public class CharacterController : MonoBehaviour
     }
 
     // Update is called once per frame
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(1))
+        {
+            //anim.SetBool("Aiming", !anim.GetBool("Aiming"));
+            anim.SetTrigger("Aiming");
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            anim.SetTrigger("Firing");
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            anim.SetTrigger("Reloading");
+        }
+
+        if(Input.GetKey(KeyCode.W))
+        {
+            anim.SetTrigger("WalkingWithRifle");
+        }
+
+        if(Input.GetKey(KeyCode.E))
+        {
+            anim.SetTrigger("WalkingAndFiring");
+        }
+
+        
+        /*if(Input.GetMouseButtonUp(0))
+        {
+            anim.SetBool("Firing", false);
+        }*/
+    }
     void FixedUpdate()
     {
         PlayerMovement();
@@ -76,6 +112,18 @@ public class CharacterController : MonoBehaviour
           transform.position+=cam.transform.forward * forwardMovement+cam.transform.right*horizontalMovement;
   }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag=="Ammo")
+        {
+            print("Ammo collected");
+        }
+
+        else if(collision.gameObject.tag=="MedBox")
+        {
+            print("MedBox Collected");
+        }
+    }
     void PlayerJumpMovement()
     {
         if(Input.GetKeyDown(KeyCode.Space) && PlayerGrounded())
